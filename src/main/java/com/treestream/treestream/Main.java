@@ -1,6 +1,7 @@
 package com.treestream.treestream;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -18,26 +19,38 @@ public class Main extends Application {
 
         // Apply BootstrapFX stylesheet
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
-        // Optional: Add custom styles
-        // scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
-
-        // Get the primary screen's bounds
-        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-
-        // Calculate 70% of screen width and height
-        double width = screenBounds.getWidth() * 0.7;
-        double height = screenBounds.getHeight() * 0.7;
-
-        // Set the window size
-        primaryStage.setWidth(width);
-        primaryStage.setHeight(height);
-
-        // Center the window
-        primaryStage.centerOnScreen();
 
         primaryStage.setTitle("JavaFX Application with Draggable Objects");
         primaryStage.setScene(scene);
+
+        // Set the window size
+        setWindowSize(primaryStage);
+
+        // Show the stage
         primaryStage.show();
+
+        // Center the window after it's shown
+        centerWindow(primaryStage);
+    }
+
+    private void setWindowSize(Stage primaryStage) {
+        // Get the primary screen's visual bounds
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+
+        // Calculate desired width and height (70% of screen size)
+        double width = screenBounds.getWidth() * 0.7;
+        double height = screenBounds.getHeight() * 0.7;
+
+        // Set the stage size
+        primaryStage.setWidth(width);
+        primaryStage.setHeight(height);
+    }
+
+    private void centerWindow(Stage primaryStage) {
+        // Center the stage after it's shown
+        Platform.runLater(() -> {
+            primaryStage.centerOnScreen();
+        });
     }
 
     public static void main(String[] args) {
