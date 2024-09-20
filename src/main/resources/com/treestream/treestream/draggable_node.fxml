@@ -6,9 +6,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.treestream.treestream.DraggableNode"
-            prefHeight="400.0" prefWidth="600.0" >
+<?import javafx.scene.shape.Rectangle?>
 
-</AnchorPane>
+<fx:root type="javafx.scene.layout.StackPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Rectangle fx:id="rectangle" width="120" height="60" styleClass="btn-primary" />
+        <Label fx:id="nameLabel" text="new system" styleClass="text-white" />
+        <TextField fx:id="nameField" text="new system" visible="false" />
+    </children>
+</fx:root>
