@@ -1,7 +1,6 @@
 package com.treestream.treestream;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -28,16 +27,25 @@ public class Main extends Application {
 
         // Show the stage
         primaryStage.show();
-
-        // Center the window after it's shown
         centerWindow(primaryStage);
+
+        // Get the controller
+        MainController controller = loader.getController();
+
+        // Set the mainPanel size to match the window size
+        double windowWidth = primaryStage.getWidth();
+        double windowHeight = primaryStage.getHeight();
+
+        // Adjust for menu bar height
+        double menuBarHeight = 40; // Approximate height of the toolbar
+        controller.setMainPanelSize(windowWidth, windowHeight - menuBarHeight);
     }
 
     private void setWindowSize(Stage primaryStage) {
-        // Get the primary screen's visual bounds
+        // Get the primary screen's bounds
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
-        // Calculate desired width and height (70% of screen size)
+        // Calculate 70% of screen width and height
         double width = screenBounds.getWidth() * 0.7;
         double height = screenBounds.getHeight() * 0.7;
 
@@ -47,10 +55,7 @@ public class Main extends Application {
     }
 
     private void centerWindow(Stage primaryStage) {
-        // Center the stage after it's shown
-        Platform.runLater(() -> {
-            primaryStage.centerOnScreen();
-        });
+        primaryStage.centerOnScreen();
     }
 
     public static void main(String[] args) {

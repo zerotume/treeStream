@@ -22,7 +22,7 @@
         <!-- Use ScrollPane to allow for panning -->
         <ScrollPane fx:id="scrollPane" pannable="false">
             <!-- The mainPanel acts as the infinite canvas -->
-            <Pane fx:id="mainPanel" style="-fx-background-color: #f8f9fa;" prefWidth="800" prefHeight="600" />
+            <Pane fx:id="mainPanel" style="-fx-background-color: #f8f9fa;"/>
         </ScrollPane>
     </center>
 </BorderPane>

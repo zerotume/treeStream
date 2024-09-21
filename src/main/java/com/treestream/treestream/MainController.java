@@ -1,5 +1,6 @@
 package com.treestream.treestream;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseButton;
@@ -66,22 +67,39 @@ public class MainController {
 
         mainPanel.setOnScroll(this::handleScroll);
 
-        // Deactivate toggle buttons when ESC is pressed
         // Add listener to scene property
         mainPanel.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 newScene.setOnKeyPressed(event -> {
                     switch (event.getCode()) {
                         case ESCAPE:
-                            zoomInButton.setSelected(false);
-                            zoomOutButton.setSelected(false);
-                            moveButton.setSelected(false);
+                            deactivateToggleButtons();
                             break;
                         default:
                             break;
                     }
                 });
             }
+        });
+
+        // Zoom in/out on mainPanel click when buttons are active
+        mainPanel.setOnMouseClicked(event -> {
+            if (zoomInButton.isSelected()) {
+                zoom(event.getX(), event.getY(), 1 + scaleIncrement);
+            } else if (zoomOutButton.isSelected()) {
+                zoom(event.getX(), event.getY(), 1 - scaleIncrement);
+            }
+        });
+    }
+
+    public void setMainPanelSize(double width, double height) {
+        mainPanel.setPrefWidth(width);
+        mainPanel.setPrefHeight(height);
+
+        // Center the scrollPane's view after layout
+        Platform.runLater(() -> {
+            scrollPane.setHvalue(scrollPane.getHmax() / 2);
+            scrollPane.setVvalue(scrollPane.getVmax() / 2);
         });
     }
 
@@ -100,7 +118,6 @@ public class MainController {
 
     @FXML
     private void handleZoomInButton() {
-        // Toggle zoom in mode
         if (zoomInButton.isSelected()) {
             zoomOutButton.setSelected(false);
             moveButton.setSelected(false);
@@ -109,7 +126,6 @@ public class MainController {
 
     @FXML
     private void handleZoomOutButton() {
-        // Toggle zoom out mode
         if (zoomOutButton.isSelected()) {
             zoomInButton.setSelected(false);
             moveButton.setSelected(false);
@@ -118,10 +134,12 @@ public class MainController {
 
     @FXML
     private void handleMoveButton() {
-        // Toggle move mode
         if (moveButton.isSelected()) {
             zoomInButton.setSelected(false);
             zoomOutButton.setSelected(false);
+            mainPanel.setCursor(javafx.scene.Cursor.OPEN_HAND);
+        } else {
+            mainPanel.setCursor(javafx.scene.Cursor.DEFAULT);
         }
     }
 
@@ -143,8 +161,8 @@ public class MainController {
         double f = scaleValue / oldScale;
 
         // Adjust the translation to keep the focus on the zoom point
-        double dx = (x - (translateTransform.getX() + mainPanel.getLayoutX())) * (f - 1);
-        double dy = (y - (translateTransform.getY() + mainPanel.getLayoutY())) * (f - 1);
+        double dx = (x - translateTransform.getX()) * (f - 1);
+        double dy = (y - translateTransform.getY()) * (f - 1);
 
         scaleTransform.setX(scaleValue);
         scaleTransform.setY(scaleValue);
@@ -164,18 +182,24 @@ public class MainController {
         boolean expanded = false;
 
         if (nodeRight > canvasWidth) {
-            mainPanel.setPrefWidth(canvasWidth * 2);
+            mainPanel.setPrefWidth(canvasWidth * 2); // Double the width
             expanded = true;
         }
 
         if (nodeBottom > canvasHeight) {
-            mainPanel.setPrefHeight(canvasHeight * 2);
+            mainPanel.setPrefHeight(canvasHeight * 2); // Double the height
             expanded = true;
         }
 
-        // Optionally, adjust the position of other nodes or the view
         if (expanded) {
-            // Implement any additional logic if needed
+            // Keep the background color consistent
+            mainPanel.setStyle("-fx-background-color: #f8f9fa;");
         }
+    }
+
+    public void deactivateToggleButtons() {
+        zoomInButton.setSelected(false);
+        zoomOutButton.setSelected(false);
+        moveButton.setSelected(false);
     }
 }
