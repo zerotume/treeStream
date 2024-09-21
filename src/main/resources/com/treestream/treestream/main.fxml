@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ScrollPane?>
 
 <BorderPane fx:id="rootPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.treestream.treestream.MainController">
     <top>
         <ToolBar>
             <Button text="Add Object" onAction="#handleAddObject" styleClass="btn" />
+
+            <ToggleButton fx:id="zoomInButton" text="Zoom In" onAction="#handleZoomInButton" styleClass="btn" />
+            <ToggleButton fx:id="zoomOutButton" text="Zoom Out" onAction="#handleZoomOutButton" styleClass="btn" />
+            <ToggleButton fx:id="moveButton" text="Move" onAction="#handleMoveButton" styleClass="btn" />
         </ToolBar>
     </top>
     <center>
-        <Pane fx:id="mainPanel" style="-fx-bacmkground-color: #f8f9fa;" />
+        <!-- Use ScrollPane to allow for panning -->
+        <ScrollPane fx:id="scrollPane" pannable="false">
+            <!-- The mainPanel acts as the infinite canvas -->
+            <Pane fx:id="mainPanel" style="-fx-background-color: #f8f9fa;" prefWidth="800" prefHeight="600" />
+        </ScrollPane>
     </center>
 </BorderPane>
