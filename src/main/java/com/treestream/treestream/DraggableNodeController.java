@@ -41,13 +41,22 @@ public class DraggableNodeController extends StackPane {
 
     private void addDragHandlers() {
         this.setOnMousePressed(event -> {
-            mouseAnchorX = event.getSceneX() - this.getLayoutX();
-            mouseAnchorY = event.getSceneY() - this.getLayoutY();
+            mouseAnchorX = event.getX();
+            mouseAnchorY = event.getY();
+            event.consume();
         });
 
         this.setOnMouseDragged(event -> {
-            this.setLayoutX(event.getSceneX() - mouseAnchorX);
-            this.setLayoutY(event.getSceneY() - mouseAnchorY);
+            double offsetX = event.getX() - mouseAnchorX;
+            double offsetY = event.getY() - mouseAnchorY;
+
+            // Adjust for scaling
+            double scale = this.getParent().getLocalToSceneTransform().getMxx();
+
+            this.setLayoutX(this.getLayoutX() + offsetX / scale);
+            this.setLayoutY(this.getLayoutY() + offsetY / scale);
+
+            event.consume();
         });
     }
 
@@ -56,6 +65,7 @@ public class DraggableNodeController extends StackPane {
             if (event.getClickCount() == 2) {
                 editName();
             }
+            event.consume();
         });
     }
 
