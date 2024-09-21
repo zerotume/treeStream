@@ -67,15 +67,20 @@ public class MainController {
         mainPanel.setOnScroll(this::handleScroll);
 
         // Deactivate toggle buttons when ESC is pressed
-        mainPanel.getScene().setOnKeyPressed(event -> {
-            switch (event.getCode()) {
-                case ESCAPE:
-                    zoomInButton.setSelected(false);
-                    zoomOutButton.setSelected(false);
-                    moveButton.setSelected(false);
-                    break;
-                default:
-                    break;
+        // Add listener to scene property
+        mainPanel.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.setOnKeyPressed(event -> {
+                    switch (event.getCode()) {
+                        case ESCAPE:
+                            zoomInButton.setSelected(false);
+                            zoomOutButton.setSelected(false);
+                            moveButton.setSelected(false);
+                            break;
+                        default:
+                            break;
+                    }
+                });
             }
         });
     }
