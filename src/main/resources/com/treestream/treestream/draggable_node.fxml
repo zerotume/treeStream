@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.shape.Rectangle?>
-
-<fx:root type="javafx.scene.layout.StackPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root type="javafx.scene.layout.StackPane" xmlns="http://javafx.com/javafx/17"
+         xmlns:fx="http://javafx.com/fxml/1" styleClass="draggable-node">
     <children>
-        <Rectangle fx:id="rectangle" width="120" height="60" styleClass="btn-primary" />
+        <Rectangle fx:id="rectangle" width="120" height="60" styleClass="rectangle" />
         <Label fx:id="nameLabel" text="new system" styleClass="text-white" />
         <TextField fx:id="nameField" text="new system" visible="false" />
     </children>

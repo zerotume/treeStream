@@ -19,6 +19,9 @@ public class Main extends Application {
         // Apply BootstrapFX stylesheet
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
 
+        // Apply custom styles
+        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+
         primaryStage.setTitle("JavaFX Application with Draggable Objects");
         primaryStage.setScene(scene);
 
