@@ -1,10 +1,11 @@
 To Do:
 
 1. Make the panel a unlimited-sized map, and add move, zoom-in, zoom-out features.
-   a. fundamental added.
-   b. some bug -
-        i.   the canvas doesn't actually get expanded when I'm putting things there.
-        ii.  zoom in / out still doesn't work properly.
+   a. briefly works now. Jump to 2.
+   b. small bugs - 
+       i. "move" hand still show up when click on zoom in
+       ii. expanding the canvas seems too aggressive.
+       iii. zoom in/out slow.
 2. Add arrow connection feature to the nodes.
 3. Add recursive highlight based on the arrow connections.
 4. Add more labels to the nodes.
