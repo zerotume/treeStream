@@ -22,7 +22,10 @@ public class DraggableNodeController extends StackPane {
     private double mouseAnchorX;
     private double mouseAnchorY;
 
-    public DraggableNodeController() {
+    private MainController mainController;
+
+    public DraggableNodeController(MainController mainController) {
+        this.mainController = mainController;
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("draggable_node.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -53,12 +56,20 @@ public class DraggableNodeController extends StackPane {
             // Adjust for scaling
             double scale = this.getParent().getLocalToSceneTransform().getMxx();
 
-            this.setLayoutX(this.getLayoutX() + offsetX / scale);
-            this.setLayoutY(this.getLayoutY() + offsetY / scale);
+            // Update position
+            double newLayoutX = this.getLayoutX() + offsetX / scale;
+            double newLayoutY = this.getLayoutY() + offsetY / scale;
+
+            this.setLayoutX(newLayoutX);
+            this.setLayoutY(newLayoutY);
+
+            // Notify MainController to expand canvas if needed
+            mainController.expandCanvasIfNeeded(this);
 
             event.consume();
         });
     }
+
 
     private void addDoubleClickHandler() {
         this.setOnMouseClicked(event -> {

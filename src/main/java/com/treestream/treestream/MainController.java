@@ -2,6 +2,7 @@ package com.treestream.treestream;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.ScrollEvent;
@@ -106,9 +107,15 @@ public class MainController {
     @FXML
     private void handleAddObject() {
         // Create a new DraggableNodeController instance
-        DraggableNodeController node = new DraggableNodeController();
-        node.setLayoutX(50);
-        node.setLayoutY(50);
+        DraggableNodeController node = new DraggableNodeController(this);
+
+        // Place the node at the center of the view
+        double centerX = mainPanel.getPrefWidth() / 2;
+        double centerY = mainPanel.getPrefHeight() / 2;
+
+        node.setLayoutX(centerX - node.getBoundsInLocal().getWidth() / 2);
+        node.setLayoutY(centerY - node.getBoundsInLocal().getHeight() / 2);
+
         mainPanel.getChildren().add(node);
         node.editName(); // Focus on the TextField for editing
 
@@ -171,8 +178,35 @@ public class MainController {
         translateTransform.setY(translateTransform.getY() - dy);
     }
 
+    private void shiftNodesHorizontally(double shift) {
+        for (Node child : mainPanel.getChildren()) {
+            if (child instanceof DraggableNodeController) {
+                DraggableNodeController node = (DraggableNodeController) child;
+                node.setLayoutX(node.getLayoutX() + shift);
+            }
+        }
+
+        // Adjust the translate transform to keep the view centered
+        translateTransform.setX(translateTransform.getX() + shift * scaleTransform.getX() / 2);
+    }
+
+    private void shiftNodesVertically(double shift) {
+        for (Node child : mainPanel.getChildren()) {
+            if (child instanceof DraggableNodeController) {
+                DraggableNodeController node = (DraggableNodeController) child;
+                node.setLayoutY(node.getLayoutY() + shift);
+            }
+        }
+
+        // Adjust the translate transform to keep the view centered
+        translateTransform.setY(translateTransform.getY() + shift * scaleTransform.getY() / 2);
+    }
+
+
     // Expand canvas size if nodes are placed beyond current bounds
-    private void expandCanvasIfNeeded(DraggableNodeController node) {
+    public void expandCanvasIfNeeded(DraggableNodeController node) {
+        double nodeLeft = node.getLayoutX();
+        double nodeTop = node.getLayoutY();
         double nodeRight = node.getLayoutX() + node.getBoundsInParent().getWidth();
         double nodeBottom = node.getLayoutY() + node.getBoundsInParent().getHeight();
 
@@ -181,13 +215,31 @@ public class MainController {
 
         boolean expanded = false;
 
+        // Expand to the right
         if (nodeRight > canvasWidth) {
-            mainPanel.setPrefWidth(canvasWidth * 2); // Double the width
+            mainPanel.setPrefWidth(canvasWidth * 2);
             expanded = true;
         }
 
+        // Expand to the left
+        if (nodeLeft < 0) {
+            double shift = canvasWidth;
+            mainPanel.setPrefWidth(canvasWidth * 2);
+            shiftNodesHorizontally(shift);
+            expanded = true;
+        }
+
+        // Expand downward
         if (nodeBottom > canvasHeight) {
-            mainPanel.setPrefHeight(canvasHeight * 2); // Double the height
+            mainPanel.setPrefHeight(canvasHeight * 2);
+            expanded = true;
+        }
+
+        // Expand upward
+        if (nodeTop < 0) {
+            double shift = canvasHeight;
+            mainPanel.setPrefHeight(canvasHeight * 2);
+            shiftNodesVertically(shift);
             expanded = true;
         }
 
@@ -196,6 +248,7 @@ public class MainController {
             mainPanel.setStyle("-fx-background-color: #f8f9fa;");
         }
     }
+
 
     public void deactivateToggleButtons() {
         zoomInButton.setSelected(false);
