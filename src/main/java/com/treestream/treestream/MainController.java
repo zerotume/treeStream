@@ -39,6 +39,9 @@ public class MainController {
     private double mouseX;
     private double mouseY;
 
+    private DraggableNodeController selectedNode = null;
+    private boolean flowConnectMode = false;
+
     @FXML
     private void initialize() {
         // Initialize transforms
@@ -249,10 +252,36 @@ public class MainController {
         }
     }
 
+    private void updateFlowConnectButtonState() {
+        //flowConnectButton.setDisable(selectedNode == null);
+    }
+
 
     public void deactivateToggleButtons() {
         zoomInButton.setSelected(false);
         zoomOutButton.setSelected(false);
         moveButton.setSelected(false);
     }
+
+    public void setSelectedNode(DraggableNodeController node) {
+        selectedNode = node;
+        updateFlowConnectButtonState();
+    }
+
+    public void clearSelectedNode() {
+        if (selectedNode != null) {
+            selectedNode.setSelected(false);
+            selectedNode = null;
+            updateFlowConnectButtonState();
+        }
+    }
+
+    public DraggableNodeController getSelectedNode() {
+        return selectedNode;
+    }
+
+    public boolean isFlowConnectMode() {
+        return flowConnectMode;
+    }
+
 }

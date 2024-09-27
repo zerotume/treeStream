@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import java.io.IOException;
 
@@ -23,6 +24,8 @@ public class DraggableNodeController extends StackPane {
     private double mouseAnchorY;
 
     private MainController mainController;
+    private boolean isSelected = false;
+
 
     public DraggableNodeController(MainController mainController) {
         this.mainController = mainController;
@@ -40,6 +43,7 @@ public class DraggableNodeController extends StackPane {
     private void initialize() {
         addDragHandlers();
         addDoubleClickHandler();
+        addSelectionHandler();
     }
 
     private void addDragHandlers() {
@@ -93,6 +97,38 @@ public class DraggableNodeController extends StackPane {
             }
         });
     }
+
+    public void setSelected(boolean select) {
+        isSelected = select;
+        if (isSelected) {
+            rectangle.setStroke(Color.BLUE); // Indicate selection
+        } else {
+            rectangle.setStroke(Color.web("#333333")); // Default stroke color
+        }
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    private void addSelectionHandler() {
+        this.setOnMouseClicked(event -> {
+            // Consume the event if in flow connect mode
+            if (mainController.isFlowConnectMode()) {
+                mainController.handleNodeClickedForConnection(this);
+                event.consume();
+                return;
+            }
+
+            if (event.getClickCount() == 1) {
+                mainController.clearSelectedNode();
+                setSelected(true);
+                mainController.setSelectedNode(this);
+            }
+            event.consume();
+        });
+    }
+
 
     private void finishEditing() {
         nameLabel.setText(nameField.getText());
