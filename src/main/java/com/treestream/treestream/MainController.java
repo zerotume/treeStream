@@ -177,6 +177,58 @@ public class MainController {
         }
     }
 
+    public void handleNodeClickedForConnection(DraggableNodeController targetNode) {
+        if (selectedNode == null) {
+            // Should not happen, but check anyway
+            flowConnectButton.setSelected(false);
+            flowConnectMode = false;
+            return;
+        }
+
+        if (selectedNode == targetNode) {
+            // Self-connection detected
+            showError("Connect failed: self-pointing detected");
+            clearSelectedNode();
+            flowConnectButton.setSelected(false);
+            flowConnectMode = false;
+            return;
+        }
+
+        // Check for existing connection to prevent cycles
+        List<DraggableNodeController> connectedNodes = connections.getOrDefault(targetNode, new ArrayList<>());
+        if (connectedNodes.contains(selectedNode)) {
+            showError("Connect failed: self-pointing detected");
+            clearSelectedNode();
+            flowConnectButton.setSelected(false);
+            flowConnectMode = false;
+            return;
+        }
+
+        // Create the connection
+        createConnection(selectedNode, targetNode);
+
+        // Clear selection and flow connect mode
+        clearSelectedNode();
+        flowConnectButton.setSelected(false);
+        flowConnectMode = false;
+    }
+
+    private void createConnection(DraggableNodeController sourceNode, DraggableNodeController targetNode) {
+        // Create an arrow between sourceNode and targetNode
+        Arrow arrow = new Arrow(sourceNode, targetNode);
+
+        // Add the arrow to the mainPanel
+        mainPanel.getChildren().add(0, arrow); // Add behind nodes
+
+        // Store the connection
+        connections.computeIfAbsent(sourceNode, k -> new ArrayList<>()).add(targetNode);
+        arrows.add(arrow);
+    }
+
+
+
+
+
 
     private void handleScroll(ScrollEvent event) {
         if (event.getDeltaY() > 0) {
@@ -205,6 +257,8 @@ public class MainController {
         translateTransform.setX(translateTransform.getX() - dx);
         translateTransform.setY(translateTransform.getY() - dy);
     }
+
+
 
     private void shiftNodesHorizontally(double shift) {
         for (Node child : mainPanel.getChildren()) {
