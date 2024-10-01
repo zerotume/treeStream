@@ -277,7 +277,10 @@ public class MainController {
         zoomInButton.setSelected(false);
         zoomOutButton.setSelected(false);
         moveButton.setSelected(false);
+        flowConnectButton.setSelected(false);
+        flowConnectMode = false;
     }
+
 
     public void setSelectedNode(DraggableNodeController node) {
         selectedNode = node;
