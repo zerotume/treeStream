@@ -113,9 +113,8 @@ public class DraggableNodeController extends StackPane {
 
     private void addSelectionHandler() {
         this.setOnMouseClicked(event -> {
-            // Consume the event if in flow connect mode
             if (mainController.isFlowConnectMode()) {
-                //mainController.handleNodeClickedForConnection(this);
+                mainController.handleNodeClickedForConnection(this);
                 event.consume();
                 return;
             }
@@ -128,6 +127,7 @@ public class DraggableNodeController extends StackPane {
             event.consume();
         });
     }
+
 
 
     private void finishEditing() {

@@ -11,6 +11,11 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class MainController {
 
     @FXML
@@ -45,6 +50,10 @@ public class MainController {
 
     private DraggableNodeController selectedNode = null;
     private boolean flowConnectMode = false;
+
+    private Map<DraggableNodeController, List<DraggableNodeController>> connections = new HashMap<>();
+    private List<Arrow> arrows = new ArrayList<>();
+
 
     @FXML
     private void initialize() {
