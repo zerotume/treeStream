@@ -7,6 +7,7 @@ To Do:
        ii. expanding the canvas seems too aggressive.
        iii. zoom in/out slow.
 2. Add arrow connection feature to the nodes.
+   v. waiting for validation. 
 3. Add recursive highlight based on the arrow connections.
 4. Add more labels to the nodes.
 5. Add a feature to highlight by the labels.
