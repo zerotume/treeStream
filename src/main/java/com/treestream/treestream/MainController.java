@@ -17,6 +17,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+
+
 public class MainController {
 
     @FXML
@@ -38,6 +42,8 @@ public class MainController {
     private ToggleButton flowConnectButton;
 
 
+
+
     private Scale scaleTransform;
     private Translate translateTransform;
 
@@ -54,6 +60,8 @@ public class MainController {
 
     private Map<DraggableNodeController, List<DraggableNodeController>> connections = new HashMap<>();
     private List<Arrow> arrows = new ArrayList<>();
+    private Arrow selectedArrow = null;
+
 
 
     @FXML
@@ -120,6 +128,31 @@ public class MainController {
             scrollPane.setVvalue(scrollPane.getVmax() / 2);
         });
     }
+
+    private void handleKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.DELETE) {
+            if (selectedArrow != null) {
+                deleteArrow(selectedArrow);
+                selectedArrow = null;
+            }
+        } else if (event.getCode() == KeyCode.ESCAPE) {
+            deactivateToggleButtons();
+        }
+    }
+
+    private void deleteArrow(Arrow arrow) {
+        mainPanel.getChildren().remove(arrow);
+        arrows.remove(arrow);
+        // Remove the connection from the map
+        List<DraggableNodeController> targets = connections.get(arrow.getSourceNode());
+        if (targets != null) {
+            targets.remove(arrow.getTargetNode());
+            if (targets.isEmpty()) {
+                connections.remove(arrow.getSourceNode());
+            }
+        }
+    }
+
 
     @FXML
     private void handleAddObject() {
