@@ -96,15 +96,7 @@ public class MainController {
         // Add listener to scene property
         mainPanel.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
-                newScene.setOnKeyPressed(event -> {
-                    switch (event.getCode()) {
-                        case ESCAPE:
-                            deactivateToggleButtons();
-                            break;
-                        default:
-                            break;
-                    }
-                });
+                newScene.setOnKeyPressed(this::handleKeyPressed);
             }
         });
 
@@ -249,7 +241,7 @@ public class MainController {
 
     private void createConnection(DraggableNodeController sourceNode, DraggableNodeController targetNode) {
         // Create an arrow between sourceNode and targetNode
-        Arrow arrow = new Arrow(sourceNode, targetNode);
+        Arrow arrow = new Arrow(this, sourceNode, targetNode);
 
         // Add the arrow to the mainPanel
         mainPanel.getChildren().add(0, arrow); // Add behind nodes
@@ -398,6 +390,18 @@ public class MainController {
             updateFlowConnectButtonState();
         }
     }
+
+    public void setSelectedArrow(Arrow arrow) {
+        selectedArrow = arrow;
+    }
+
+    public void clearSelectedArrow() {
+        if (selectedArrow != null) {
+            selectedArrow.setSelected(false);
+            selectedArrow = null;
+        }
+    }
+
 
     public DraggableNodeController getSelectedNode() {
         return selectedNode;

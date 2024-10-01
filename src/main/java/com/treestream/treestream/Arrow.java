@@ -16,7 +16,11 @@ public class Arrow extends Group {
     private DraggableNodeController targetNode;
     private boolean isSelected = false;
 
-    public Arrow(DraggableNodeController sourceNode, DraggableNodeController targetNode) {
+    private MainController mainController;
+
+    public Arrow(MainController mainController, DraggableNodeController sourceNode, DraggableNodeController targetNode) {
+        this.mainController = mainController;
+
         this.sourceNode = sourceNode;
         this.targetNode = targetNode;
 
@@ -67,11 +71,14 @@ public class Arrow extends Group {
     private void addSelectionHandler() {
         this.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {
+                mainController.clearSelectedArrow();
                 setSelected(true);
+                mainController.setSelectedArrow(this);
                 event.consume();
             }
         });
     }
+
 
     public void setSelected(boolean select) {
         isSelected = select;
