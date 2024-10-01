@@ -28,6 +28,10 @@ public class MainController {
     @FXML
     private ToggleButton moveButton;
 
+    @FXML
+    private ToggleButton flowConnectButton;
+
+
     private Scale scaleTransform;
     private Translate translateTransform;
 
@@ -152,6 +156,18 @@ public class MainController {
             mainPanel.setCursor(javafx.scene.Cursor.DEFAULT);
         }
     }
+
+    @FXML
+    private void handleFlowConnectButton() {
+        if (flowConnectButton.isSelected()) {
+            flowConnectMode = true;
+            // Deactivate other modes if necessary
+            // For example, deactivate move or zoom modes
+        } else {
+            flowConnectMode = false;
+        }
+    }
+
 
     private void handleScroll(ScrollEvent event) {
         if (event.getDeltaY() > 0) {

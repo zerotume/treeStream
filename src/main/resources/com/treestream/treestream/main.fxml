@@ -16,6 +16,8 @@
             <ToggleButton fx:id="zoomInButton" text="Zoom In" onAction="#handleZoomInButton" styleClass="btn" />
             <ToggleButton fx:id="zoomOutButton" text="Zoom Out" onAction="#handleZoomOutButton" styleClass="btn" />
             <ToggleButton fx:id="moveButton" text="Move" onAction="#handleMoveButton" styleClass="btn" />
+            <ToggleButton fx:id="flowConnectButton" text="Flow Connect" onAction="#handleFlowConnectButton" styleClass="btn" disable="true" />
+
         </ToolBar>
     </top>
     <center>
