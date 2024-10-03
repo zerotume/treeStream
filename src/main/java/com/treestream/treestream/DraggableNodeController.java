@@ -44,6 +44,7 @@ public class DraggableNodeController extends StackPane {
         addDragHandlers();
         addDoubleClickHandler();
         addSelectionHandler();
+        this.setFocusTraversable(true); // Make the node focus traversable
     }
 
     private void addDragHandlers() {
@@ -125,6 +126,7 @@ public class DraggableNodeController extends StackPane {
                 mainController.clearSelectedNode();
                 setSelected(true);
                 mainController.setSelectedNode(this);
+                this.requestFocus(); // Request focus to ensure focus change to exit edit mode
             }
             event.consume();
         });

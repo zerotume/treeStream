@@ -25,6 +25,7 @@ public class DraggableNode extends StackPane {
         nameField = new TextField("new system");
         nameField.setVisible(false);
 
+
         // Add event handlers
         addDragHandlers();
         addDoubleClickHandler();

@@ -71,6 +71,8 @@ public class MainController {
         scaleTransform = new Scale(scaleValue, scaleValue, 0, 0);
         translateTransform = new Translate();
 
+        mainPanel.setFocusTraversable(true);
+
         mainPanel.getTransforms().addAll(scaleTransform, translateTransform);
 
         // Add event handlers
@@ -106,7 +108,9 @@ public class MainController {
                 clearSelectedNode();
                 clearSelectedArrow();
                 deactivateFlowConnectMode();
-                event.consume();
+                // do not consume - so it could exit the edit mode?
+                //event.consume();
+                mainPanel.requestFocus();
             }
         });
 
