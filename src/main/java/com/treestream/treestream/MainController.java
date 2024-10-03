@@ -19,6 +19,7 @@ import java.util.Map;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 
 
 public class MainController {
@@ -100,7 +101,19 @@ public class MainController {
             }
         });
 
+        // Add event filter to clear selection when clicking on empty space
+        // capture phase, root node to target node
+        mainPanel.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            if (event.getTarget() == mainPanel) {
+                clearSelectedNode();
+                clearSelectedArrow();
+                deactivateFlowConnectMode();
+                event.consume();
+            }
+        });
+
         // Zoom in/out on mainPanel click when buttons are active
+        // bubbling phase, target node to root node
         mainPanel.setOnMouseClicked(event -> {
             if (zoomInButton.isSelected()) {
                 zoom(event.getX(), event.getY(), 1 + scaleIncrement);
@@ -109,6 +122,8 @@ public class MainController {
             }
         });
     }
+
+
 
     public void setMainPanelSize(double width, double height) {
         mainPanel.setPrefWidth(width);
@@ -144,6 +159,12 @@ public class MainController {
             }
         }
     }
+
+    private void deactivateFlowConnectMode() {
+        flowConnectButton.setSelected(false);
+        flowConnectMode = false;
+    }
+
 
 
     @FXML
@@ -206,8 +227,7 @@ public class MainController {
     public void handleNodeClickedForConnection(DraggableNodeController targetNode) {
         if (selectedNode == null) {
             // Should not happen, but check anyway
-            flowConnectButton.setSelected(false);
-            flowConnectMode = false;
+            deactivateFlowConnectMode();
             return;
         }
 
@@ -215,8 +235,7 @@ public class MainController {
             // Self-connection detected
             showError("Connect failed: self-pointing detected");
             clearSelectedNode();
-            flowConnectButton.setSelected(false);
-            flowConnectMode = false;
+            deactivateFlowConnectMode();
             return;
         }
 
@@ -225,8 +244,7 @@ public class MainController {
         if (connectedNodes.contains(selectedNode)) {
             showError("Connect failed: self-pointing detected");
             clearSelectedNode();
-            flowConnectButton.setSelected(false);
-            flowConnectMode = false;
+            deactivateFlowConnectMode();
             return;
         }
 
@@ -235,8 +253,7 @@ public class MainController {
 
         // Clear selection and flow connect mode
         clearSelectedNode();
-        flowConnectButton.setSelected(false);
-        flowConnectMode = false;
+        deactivateFlowConnectMode();
     }
 
     private void createConnection(DraggableNodeController sourceNode, DraggableNodeController targetNode) {
