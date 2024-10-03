@@ -7,8 +7,10 @@ To Do:
        ii. expanding the canvas seems too aggressive.
        iii. zoom in/out slow.
 2. Add arrow connection feature to the nodes. Validated:
-   a. no unselect functionality / handlers.
-   b. flow connection wasn't enabled - hard stop. (fixed)
+   a. no unselect functionality / handlers. (added)
+        ?. cannot exit the edit mode (fixed)
+           huh??. cannot enter the edit mode by double clicking 
+   b. flow connection wasn't enabled - hard stop. (fixed)3. 
    c. I cannot see the arrow head
    d. if flow connected no need to have another
    e. hard to select the arrow - it could be bolder
