@@ -6,9 +6,12 @@ To Do:
        i. "move" hand still show up when click on zoom in
        ii. expanding the canvas seems too aggressive.
        iii. zoom in/out slow.
-   2. Add arrow connection feature to the nodes. Validated:
-      a. no unselect functionality / handlers.
-      b. flow connection wasn't enabled - hard stop.
+2. Add arrow connection feature to the nodes. Validated:
+   a. no unselect functionality / handlers.
+   b. flow connection wasn't enabled - hard stop. (fixed)
+   c. I cannot see the arrow head
+   d. if flow connected no need to have another
+   e. hard to select the arrow - it could be bolder
 3. Add recursive highlight based on the arrow connections.
 4. Add more labels to the nodes.
 5. Add a feature to highlight by the labels.
