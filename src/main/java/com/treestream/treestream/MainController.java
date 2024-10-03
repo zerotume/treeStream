@@ -365,7 +365,7 @@ public class MainController {
     }
 
     private void updateFlowConnectButtonState() {
-        //flowConnectButton.setDisable(selectedNode == null);
+        flowConnectButton.setDisable(selectedNode == null);
     }
 
 
