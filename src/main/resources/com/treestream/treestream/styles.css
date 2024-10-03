@@ -11,3 +11,8 @@
     -fx-stroke: #333333; /* Even darker grey for the border */
     -fx-stroke-width: 2;
 }
+
+.draggable-node.selected {
+    -fx-border-color: blue;
+    -fx-border-width: 2;
+}

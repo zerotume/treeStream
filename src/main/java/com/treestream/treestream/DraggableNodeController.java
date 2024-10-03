@@ -101,9 +101,11 @@ public class DraggableNodeController extends StackPane {
     public void setSelected(boolean select) {
         isSelected = select;
         if (isSelected) {
-            rectangle.setStroke(Color.BLUE); // Indicate selection
+            if (!getStyleClass().contains("selected")) {
+                getStyleClass().add("selected");
+            }
         } else {
-            rectangle.setStroke(Color.web("#333333")); // Default stroke color
+            getStyleClass().remove("selected");
         }
     }
 
@@ -134,5 +136,8 @@ public class DraggableNodeController extends StackPane {
         nameLabel.setText(nameField.getText());
         nameField.setVisible(false);
         nameLabel.setVisible(true);
+        if (isSelected) {
+            setSelected(true);
+        }
     }
 }

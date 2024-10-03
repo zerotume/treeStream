@@ -101,8 +101,6 @@ public class MainController {
             }
         });
 
-        // Add event filter to clear selection when clicking on empty space
-        // capture phase, root node to target node
         mainPanel.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             if (event.getTarget() == mainPanel) {
                 clearSelectedNode();
@@ -112,8 +110,8 @@ public class MainController {
             }
         });
 
+
         // Zoom in/out on mainPanel click when buttons are active
-        // bubbling phase, target node to root node
         mainPanel.setOnMouseClicked(event -> {
             if (zoomInButton.isSelected()) {
                 zoom(event.getX(), event.getY(), 1 + scaleIncrement);
@@ -164,7 +162,6 @@ public class MainController {
         flowConnectButton.setSelected(false);
         flowConnectMode = false;
     }
-
 
 
     @FXML
@@ -390,8 +387,7 @@ public class MainController {
         zoomInButton.setSelected(false);
         zoomOutButton.setSelected(false);
         moveButton.setSelected(false);
-        flowConnectButton.setSelected(false);
-        flowConnectMode = false;
+        deactivateFlowConnectMode();
     }
 
 
