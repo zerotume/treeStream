@@ -42,8 +42,9 @@ public class DraggableNodeController extends StackPane {
     @FXML
     private void initialize() {
         addDragHandlers();
-        addDoubleClickHandler();
-        addSelectionHandler();
+        //addDoubleClickHandler(); // merged
+        // addSelectionHandler(); // merged
+        addMouseClickHandler();
         this.setFocusTraversable(true); // Make the node focus traversable
     }
 
@@ -75,15 +76,15 @@ public class DraggableNodeController extends StackPane {
         });
     }
 
-
-    private void addDoubleClickHandler() {
-        this.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                editName();
-            }
-            event.consume();
-        });
-    }
+// merged:
+//    private void addDoubleClickHandler() {
+//        this.setOnMouseClicked(event -> {
+//            if (event.getClickCount() == 2) {
+//                editName();
+//            }
+//            event.consume();
+//        });
+//    }
 
     public void editName() {
         nameLabel.setVisible(false);
@@ -114,7 +115,7 @@ public class DraggableNodeController extends StackPane {
         return isSelected;
     }
 
-    private void addSelectionHandler() {
+    private void addMouseClickHandler() {
         this.setOnMouseClicked(event -> {
             if (mainController.isFlowConnectMode()) {
                 mainController.handleNodeClickedForConnection(this);
@@ -122,15 +123,38 @@ public class DraggableNodeController extends StackPane {
                 return;
             }
 
-            if (event.getClickCount() == 1) {
+            if (event.getClickCount() == 2) {
+                editName();
+                event.consume();
+            } else if (event.getClickCount() == 1) {
                 mainController.clearSelectedNode();
                 setSelected(true);
                 mainController.setSelectedNode(this);
-                this.requestFocus(); // Request focus to ensure focus change to exit edit mode
+                this.requestFocus();
+                event.consume();
             }
-            event.consume();
         });
     }
+
+
+    // merged:
+//    private void addSelectionHandler() {
+//        this.setOnMouseClicked(event -> {
+//            if (mainController.isFlowConnectMode()) {
+//                mainController.handleNodeClickedForConnection(this);
+//                event.consume();
+//                return;
+//            }
+//
+//            if (event.getClickCount() == 1) {
+//                mainController.clearSelectedNode();
+//                setSelected(true);
+//                mainController.setSelectedNode(this);
+//                this.requestFocus(); // Request focus to ensure focus change to exit edit mode
+//            }
+//            event.consume();
+//        });
+//    }
 
 
 
