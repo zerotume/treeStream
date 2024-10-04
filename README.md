@@ -9,7 +9,7 @@ To Do:
 2. Add arrow connection feature to the nodes. Validated:
    a. no unselect functionality / handlers. (added)
         ?. cannot exit the edit mode (fixed)
-           huh??. cannot enter the edit mode by double clicking 
+           huh??. cannot enter the edit mode by double clicking  (fixed)
    b. flow connection wasn't enabled - hard stop. (fixed)3. 
    c. I cannot see the arrow head
    d. if flow connected no need to have another

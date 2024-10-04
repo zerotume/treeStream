@@ -44,7 +44,7 @@ public class DraggableNodeController extends StackPane {
         addDragHandlers();
         //addDoubleClickHandler(); // merged
         // addSelectionHandler(); // merged
-        addMouseClickHandler();
+        addMouseClickHandler(); // if we have multiple click handlers, only the last one takes effect
         this.setFocusTraversable(true); // Make the node focus traversable
     }
 
