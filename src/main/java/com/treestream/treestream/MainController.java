@@ -59,10 +59,11 @@ public class MainController {
     private DraggableNodeController selectedNode = null;
     private boolean flowConnectMode = false;
 
-    private Map<DraggableNodeController, List<DraggableNodeController>> connections = new HashMap<>();
+    //private Map<DraggableNodeController, List<DraggableNodeController>> connections = new HashMap<>();
     private List<Arrow> arrows = new ArrayList<>();
     private Arrow selectedArrow = null;
 
+    private Graph graph = new Graph();
 
 
     @FXML
@@ -149,17 +150,13 @@ public class MainController {
         }
     }
 
+
+
     private void deleteArrow(Arrow arrow) {
         mainPanel.getChildren().remove(arrow);
         arrows.remove(arrow);
-        // Remove the connection from the map
-        List<DraggableNodeController> targets = connections.get(arrow.getSourceNode());
-        if (targets != null) {
-            targets.remove(arrow.getTargetNode());
-            if (targets.isEmpty()) {
-                connections.remove(arrow.getSourceNode());
-            }
-        }
+        // Remove the edge from the graph
+        graph.removeEdge(arrow.getSourceNode(), arrow.getTargetNode());
     }
 
     private void deactivateFlowConnectMode() {
@@ -172,6 +169,7 @@ public class MainController {
     private void handleAddObject() {
         // Create a new DraggableNodeController instance
         DraggableNodeController node = new DraggableNodeController(this);
+        graph.addNode(node);
 
         // Place the node at the center of the view
         double centerX = mainPanel.getPrefWidth() / 2;
@@ -186,6 +184,17 @@ public class MainController {
         // Expand canvas if necessary
         expandCanvasIfNeeded(node);
     }
+
+    // do the delete into a handler later - leaving it here for now
+    public void deleteNode(DraggableNodeController node) {
+        // Remove from mainPanel
+        mainPanel.getChildren().remove(node);
+        // Remove from graph
+        graph.removeNode(node);
+        // Also remove any arrows connected to this node
+        // ...
+    }
+
 
     @FXML
     private void handleZoomInButton() {
@@ -241,13 +250,14 @@ public class MainController {
         }
 
         // Check for existing connection to prevent cycles
-        List<DraggableNodeController> connectedNodes = connections.getOrDefault(targetNode, new ArrayList<>());
+        // commented out since we have graph.createsCycle
+        /*List<DraggableNodeController> connectedNodes = connections.getOrDefault(targetNode, new ArrayList<>());
         if (connectedNodes.contains(selectedNode)) {
             showError("Connect failed: self-pointing detected");
             clearSelectedNode();
             deactivateFlowConnectMode();
             return;
-        }
+        }*/
 
         // Create the connection
         createConnection(selectedNode, targetNode);
@@ -258,16 +268,25 @@ public class MainController {
     }
 
     private void createConnection(DraggableNodeController sourceNode, DraggableNodeController targetNode) {
+        // Check for cycles
+        if (graph.createsCycle(sourceNode, targetNode)) {
+            showError("Connect failed: adding this connection creates a cycle.");
+            return;
+        }
+
+        // Add the edge to the graph
+        graph.addEdge(sourceNode, targetNode);
+
         // Create an arrow between sourceNode and targetNode
         Arrow arrow = new Arrow(this, sourceNode, targetNode);
 
         // Add the arrow to the mainPanel
         mainPanel.getChildren().add(0, arrow); // Add behind nodes
 
-        // Store the connection
-        connections.computeIfAbsent(sourceNode, k -> new ArrayList<>()).add(targetNode);
+        // Store the arrow
         arrows.add(arrow);
     }
+
 
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
