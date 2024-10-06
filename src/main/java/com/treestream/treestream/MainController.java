@@ -316,24 +316,30 @@ public class MainController {
             if (child instanceof DraggableNodeController) {
                 DraggableNodeController node = (DraggableNodeController) child;
                 node.setLayoutX(node.getLayoutX() + shift);
+            } else if (child instanceof Arrow) {
+                // Arrows will adjust automatically if bound to node positions
             }
         }
 
-        // Adjust the translate transform to keep the view centered
-        translateTransform.setX(translateTransform.getX() + shift * scaleTransform.getX() / 2);
+        // Adjust the translate transform if necessary
+        // translateTransform.setX(translateTransform.getX() + shift * scaleTransform.getX());
     }
+
 
     private void shiftNodesVertically(double shift) {
         for (Node child : mainPanel.getChildren()) {
             if (child instanceof DraggableNodeController) {
                 DraggableNodeController node = (DraggableNodeController) child;
                 node.setLayoutY(node.getLayoutY() + shift);
+            } else if (child instanceof Arrow) {
+                // Arrows will adjust automatically if bound to node positions
             }
         }
 
-        // Adjust the translate transform to keep the view centered
-        translateTransform.setY(translateTransform.getY() + shift * scaleTransform.getY() / 2);
+        // Adjust the translate transform if necessary
+        // translateTransform.setY(translateTransform.getY() + shift * scaleTransform.getY());
     }
+
 
 
     // Expand canvas size if nodes are placed beyond current bounds
@@ -348,30 +354,34 @@ public class MainController {
 
         boolean expanded = false;
 
+        // Variables to store old and new canvas sizes
+        double oldCanvasWidth = canvasWidth;
+        double oldCanvasHeight = canvasHeight;
+
         // Expand to the right
         if (nodeRight > canvasWidth) {
-            mainPanel.setPrefWidth(canvasWidth * 2);
+            mainPanel.setPrefWidth(nodeRight + 100); // Expand just enough to include the node plus some padding
             expanded = true;
         }
 
         // Expand to the left
         if (nodeLeft < 0) {
-            double shift = canvasWidth;
-            mainPanel.setPrefWidth(canvasWidth * 2);
+            double shift = -nodeLeft + 100; // Amount to shift nodes to the right
+            mainPanel.setPrefWidth(canvasWidth + shift);
             shiftNodesHorizontally(shift);
             expanded = true;
         }
 
         // Expand downward
         if (nodeBottom > canvasHeight) {
-            mainPanel.setPrefHeight(canvasHeight * 2);
+            mainPanel.setPrefHeight(nodeBottom + 100); // Expand just enough to include the node plus some padding
             expanded = true;
         }
 
         // Expand upward
         if (nodeTop < 0) {
-            double shift = canvasHeight;
-            mainPanel.setPrefHeight(canvasHeight * 2);
+            double shift = -nodeTop + 100; // Amount to shift nodes downward
+            mainPanel.setPrefHeight(canvasHeight + shift);
             shiftNodesVertically(shift);
             expanded = true;
         }
@@ -379,8 +389,42 @@ public class MainController {
         if (expanded) {
             // Keep the background color consistent
             mainPanel.setStyle("-fx-background-color: #f8f9fa;");
+            // Adjust the viewport to center on the node
+            centerViewportOnNode(node);
         }
     }
+
+    private void centerViewportOnNode(DraggableNodeController node) {
+        // Calculate the node's position relative to the content
+        double nodeCenterX = node.getLayoutX() + node.getBoundsInParent().getWidth() / 2;
+        double nodeCenterY = node.getLayoutY() + node.getBoundsInParent().getHeight() / 2;
+
+        double contentWidth = mainPanel.getPrefWidth();
+        double contentHeight = mainPanel.getPrefHeight();
+
+        double viewportWidth = scrollPane.getViewportBounds().getWidth();
+        double viewportHeight = scrollPane.getViewportBounds().getHeight();
+
+        // Calculate the scroll values needed to center the node
+        double hValue = (nodeCenterX - viewportWidth / 2) / (contentWidth - viewportWidth);
+        double vValue = (nodeCenterY - viewportHeight / 2) / (contentHeight - viewportHeight);
+
+        // Clamp the values between 0 and 1
+        hValue = Math.max(0, Math.min(hValue, 1));
+        vValue = Math.max(0, Math.min(vValue, 1));
+
+        // Update the scroll values after the layout pass
+        double finalHValue = hValue;
+        double finalVValue = vValue;
+        Platform.runLater(() -> {
+            scrollPane.setHvalue(finalHValue);
+            scrollPane.setVvalue(finalVValue);
+        });
+    }
+
+
+
+
 
     private void updateFlowConnectButtonState() {
         flowConnectButton.setDisable(selectedNode == null);

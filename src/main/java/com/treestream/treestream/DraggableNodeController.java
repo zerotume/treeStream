@@ -52,29 +52,25 @@ public class DraggableNodeController extends StackPane {
         this.setOnMousePressed(event -> {
             mouseAnchorX = event.getX();
             mouseAnchorY = event.getY();
-            event.consume();
         });
 
         this.setOnMouseDragged(event -> {
-            double offsetX = event.getX() - mouseAnchorX;
-            double offsetY = event.getY() - mouseAnchorY;
+            double newX = this.getLayoutX() + event.getX() - mouseAnchorX;
+            double newY = this.getLayoutY() + event.getY() - mouseAnchorY;
 
-            // Adjust for scaling
-            double scale = this.getParent().getLocalToSceneTransform().getMxx();
-
-            // Update position
-            double newLayoutX = this.getLayoutX() + offsetX / scale;
-            double newLayoutY = this.getLayoutY() + offsetY / scale;
-
-            this.setLayoutX(newLayoutX);
-            this.setLayoutY(newLayoutY);
-
-            // Notify MainController to expand canvas if needed
-            mainController.expandCanvasIfNeeded(this);
+            this.setLayoutX(newX);
+            this.setLayoutY(newY);
 
             event.consume();
         });
+
+        this.setOnMouseReleased(event -> {
+            // After the drag is complete, check if expansion is needed
+            mainController.expandCanvasIfNeeded(this);
+            event.consume();
+        });
     }
+
 
 // merged:
 //    private void addDoubleClickHandler() {
