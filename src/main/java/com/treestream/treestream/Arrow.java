@@ -26,8 +26,8 @@ public class Arrow extends Group {
         arrowHead = new Polygon();
         arrowHead.getPoints().addAll(
                 0.0, 0.0,
-                -20.0, -15.0, // Increased size
-                -20.0, 15.0
+                -15.0, -10.0,
+                -15.0, 10.0
         );
 
         line.setStrokeWidth(2);
@@ -46,33 +46,36 @@ public class Arrow extends Group {
         this.getChildren().addAll(line, arrowHead);
 
         addSelectionHandler();
-
-//        line.endXProperty().addListener((obs, oldVal, newVal) -> {
-//            System.out.println("Line endX: " + newVal);
-//        });
-//
-//        arrowHead.layoutXProperty().addListener((obs, oldVal, newVal) -> {
-//            System.out.println("arrow endX: " + newVal);
-//        });
     }
 
     private void updateLineBindings() {
-        line.startXProperty().bind(Bindings.createDoubleBinding(() ->
-                        sourceNode.getLayoutX() + sourceNode.getWidth() / 2,
+        // Line start point bindings (same as before)
+        line.startXProperty().bind(Bindings.createDoubleBinding(
+                () -> sourceNode.getLayoutX() + sourceNode.getWidth() / 2,
                 sourceNode.layoutXProperty(), sourceNode.widthProperty()));
 
-        line.startYProperty().bind(Bindings.createDoubleBinding(() ->
-                        sourceNode.getLayoutY() + sourceNode.getHeight() / 2,
+        line.startYProperty().bind(Bindings.createDoubleBinding(
+                () -> sourceNode.getLayoutY() + sourceNode.getHeight() / 2,
                 sourceNode.layoutYProperty(), sourceNode.heightProperty()));
 
-        line.endXProperty().bind(Bindings.createDoubleBinding(() ->
-                        targetNode.getLayoutX() + targetNode.getWidth() / 2,
-                targetNode.layoutXProperty(), targetNode.widthProperty()));
+        // Line end point bindings with adjusted calculations
+        line.endXProperty().bind(Bindings.createDoubleBinding(
+                () -> calculateAdjustedEndX(),
+                sourceNode.layoutXProperty(), sourceNode.layoutYProperty(),
+                sourceNode.widthProperty(), sourceNode.heightProperty(),
+                targetNode.layoutXProperty(), targetNode.layoutYProperty(),
+                targetNode.widthProperty(), targetNode.heightProperty()
+        ));
 
-        line.endYProperty().bind(Bindings.createDoubleBinding(() ->
-                        targetNode.getLayoutY() + targetNode.getHeight() / 2,
-                targetNode.layoutYProperty(), targetNode.heightProperty()));
+        line.endYProperty().bind(Bindings.createDoubleBinding(
+                () -> calculateAdjustedEndY(),
+                sourceNode.layoutXProperty(), sourceNode.layoutYProperty(),
+                sourceNode.widthProperty(), sourceNode.heightProperty(),
+                targetNode.layoutXProperty(), targetNode.layoutYProperty(),
+                targetNode.widthProperty(), targetNode.heightProperty()
+        ));
     }
+
 
     private void updateArrowheadBindings() {
         // Position arrowhead at the end of the line
