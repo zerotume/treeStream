@@ -60,7 +60,7 @@ public class Arrow extends Group {
 
         // Line end point bindings with adjusted calculations
         line.endXProperty().bind(Bindings.createDoubleBinding(
-                () -> calculateAdjustedEndX(),
+                this::calculateAdjustedEndX,
                 sourceNode.layoutXProperty(), sourceNode.layoutYProperty(),
                 sourceNode.widthProperty(), sourceNode.heightProperty(),
                 targetNode.layoutXProperty(), targetNode.layoutYProperty(),
@@ -68,12 +68,84 @@ public class Arrow extends Group {
         ));
 
         line.endYProperty().bind(Bindings.createDoubleBinding(
-                () -> calculateAdjustedEndY(),
+                this::calculateAdjustedEndY,
                 sourceNode.layoutXProperty(), sourceNode.layoutYProperty(),
                 sourceNode.widthProperty(), sourceNode.heightProperty(),
                 targetNode.layoutXProperty(), targetNode.layoutYProperty(),
                 targetNode.widthProperty(), targetNode.heightProperty()
         ));
+    }
+
+    private double calculateAdjustedEndX() {
+        double sourceCenterX = sourceNode.getLayoutX() + sourceNode.getWidth() / 2;
+        double sourceCenterY = sourceNode.getLayoutY() + sourceNode.getHeight() / 2;
+        double targetCenterX = targetNode.getLayoutX() + targetNode.getWidth() / 2;
+        double targetCenterY = targetNode.getLayoutY() + targetNode.getHeight() / 2;
+
+        double deltaX = targetCenterX - sourceCenterX;
+        double deltaY = targetCenterY - sourceCenterY;
+
+        double dx = deltaX;
+        double dy = deltaY;
+
+        double absDx = Math.abs(dx);
+        double absDy = Math.abs(dy);
+
+        // Handle zero-length lines (nodes at the same position)
+        if (absDx == 0 && absDy == 0) {
+            return targetCenterX;
+        }
+
+        double length = Math.hypot(dx, dy);
+        double unitDx = dx / length;
+        double unitDy = dy / length;
+
+        double halfWidth = targetNode.getWidth() / 2;
+        double halfHeight = targetNode.getHeight() / 2;
+
+        double scaleX = absDx > 0 ? halfWidth / absDx : Double.POSITIVE_INFINITY;
+        double scaleY = absDy > 0 ? halfHeight / absDy : Double.POSITIVE_INFINITY;
+
+        double scale = Math.min(scaleX, scaleY);
+
+        double offsetX = unitDx * scale * length;
+        return targetCenterX - offsetX;
+    }
+
+    private double calculateAdjustedEndY() {
+        double sourceCenterX = sourceNode.getLayoutX() + sourceNode.getWidth() / 2;
+        double sourceCenterY = sourceNode.getLayoutY() + sourceNode.getHeight() / 2;
+        double targetCenterX = targetNode.getLayoutX() + targetNode.getWidth() / 2;
+        double targetCenterY = targetNode.getLayoutY() + targetNode.getHeight() / 2;
+
+        double deltaX = targetCenterX - sourceCenterX;
+        double deltaY = targetCenterY - sourceCenterY;
+
+        double dx = deltaX;
+        double dy = deltaY;
+
+        double absDx = Math.abs(dx);
+        double absDy = Math.abs(dy);
+
+        // Handle zero-length lines
+        if (absDx == 0 && absDy == 0) {
+            return targetCenterY;
+        }
+
+        double length = Math.hypot(dx, dy);
+        double unitDx = dx / length;
+        double unitDy = dy / length;
+
+        double halfWidth = targetNode.getWidth() / 2;
+        double halfHeight = targetNode.getHeight() / 2;
+
+        double scaleX = absDx > 0 ? halfWidth / absDx : Double.POSITIVE_INFINITY;
+        double scaleY = absDy > 0 ? halfHeight / absDy : Double.POSITIVE_INFINITY;
+
+        double scale = Math.min(scaleX, scaleY);
+
+        double offsetY = unitDy * scale * length;
+        return targetCenterY - offsetY;
     }
 
 
