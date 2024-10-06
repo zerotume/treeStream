@@ -73,4 +73,6 @@ public class DraggableNode extends StackPane {
         nameField.setVisible(false);
         nameLabel.setVisible(true);
     }
+
+
 }

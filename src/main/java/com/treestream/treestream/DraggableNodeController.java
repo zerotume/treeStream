@@ -9,6 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import java.io.IOException;
 
+
+
 public class DraggableNodeController extends StackPane {
 
     @FXML
@@ -25,6 +27,9 @@ public class DraggableNodeController extends StackPane {
 
     private MainController mainController;
     private boolean isSelected = false;
+
+    private static int idCounter = 0;
+    private int nodeId;
 
 
     public DraggableNodeController(MainController mainController) {
@@ -161,5 +166,19 @@ public class DraggableNodeController extends StackPane {
         if (isSelected) {
             setSelected(true);
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof DraggableNodeController)) return false;
+        DraggableNodeController other = (DraggableNodeController) obj;
+        // Compare based on unique identifier or other criteria
+        return this.uniqueId.equals(other.uniqueId);
+    }
+
+    @Override
+    public int hashCode() {
+        return uniqueId.hashCode();
     }
 }

@@ -199,4 +199,18 @@ public class Arrow extends Group {
     public DraggableNodeController getTargetNode() {
         return targetNode;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof DraggableNodeController)) return false;
+        DraggableNodeController other = (DraggableNodeController) obj;
+        // Compare based on unique identifier or other criteria
+        return this.uniqueId.equals(other.uniqueId);
+    }
+
+    @Override
+    public int hashCode() {
+        return uniqueId.hashCode();
+    }
 }
