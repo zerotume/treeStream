@@ -26,11 +26,11 @@ public class Arrow extends Group {
         arrowHead = new Polygon();
         arrowHead.getPoints().addAll(
                 0.0, 0.0,
-                -15.0, -10.0,
-                -15.0, 10.0
+                -20.0, -15.0,
+                -20.0, 15.0
         );
 
-        line.setStrokeWidth(2);
+        line.setStrokeWidth(7);
         line.setStroke(Color.BLACK);
 
         arrowHead.setFill(Color.BLACK);

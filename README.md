@@ -10,10 +10,11 @@ To Do:
    a. no unselect functionality / handlers. (added)
         ?. cannot exit the edit mode (fixed)
            huh??. cannot enter the edit mode by double clicking  (fixed)
-   b. flow connection wasn't enabled - hard stop. (fixed)3. 
-   c. I cannot see the arrow head - caught issue - it is connected to the center lol ..... my bad
-   d. if flow connected no need to have another
-   e. hard to select the arrow - it could be bolder
+   b. flow connection wasn't enabled - hard stop. (fixed) 
+   c. I cannot see the arrow head - caught issue - it is connected to the center lol ..... my bad (fixed)
+       um. optimize - the arrow is not perfect yet .... when to the left, up, down 
+   d. if flow connected no need to have another (small)
+   e. hard to select the arrow - it could be bolder (bolded)
 3. Add recursive highlight based on the arrow connections.
 4. Add more labels to the nodes.
 5. Add a feature to highlight by the labels.
