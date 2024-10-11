@@ -200,6 +200,7 @@ public class Arrow extends Group {
         return targetNode;
     }
 
+    /*
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -213,4 +214,6 @@ public class Arrow extends Group {
     public int hashCode() {
         return uniqueId.hashCode();
     }
+
+     */
 }

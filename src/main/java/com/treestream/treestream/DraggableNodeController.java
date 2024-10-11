@@ -168,6 +168,8 @@ public class DraggableNodeController extends StackPane {
         }
     }
 
+
+    /*
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -181,4 +183,6 @@ public class DraggableNodeController extends StackPane {
     public int hashCode() {
         return uniqueId.hashCode();
     }
+
+     */
 }
