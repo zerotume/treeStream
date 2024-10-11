@@ -17,8 +17,10 @@ To Do:
    e. hard to select the arrow - it could be bolder (bolded)
 2 1/2. Fixed the evil bug : when going to border it expands infinitely  (fixed)
 3. Add recursive highlight based on the arrow connections. - DAG!DAG!DAG!DAG!DAG!DAG!DAG!DAG!DAG!DAG!DAG!DAG!DAG!DAG!DAG!DAG! (done)
+-4. single highlight? 
 4. Add more labels to the nodes.
-   a. and we could add hash unique ID to the nodes.
+   a. is it better to be another menu on the left side?? - seems so tbh. make it another part of the window. 
+   b. and we could add hash unique ID to the nodes.
 5. Add a feature to highlight by the labels.
 6. Design a file for saving and loading the diagram info.
 (to be continued)
