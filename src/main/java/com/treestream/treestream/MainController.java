@@ -1,6 +1,8 @@
 package com.treestream.treestream;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -63,8 +65,6 @@ public class MainController {
     private ListView<LabelItem> attachedLabelsListView;
 
 
-
-
     private Scale scaleTransform;
     private Translate translateTransform;
 
@@ -85,6 +85,8 @@ public class MainController {
 
     private Graph graph = new Graph();
 
+    private ObservableList<LabelItem> labels = FXCollections.observableArrayList();
+    private LabelItem selectedLabel = null;
 
     @FXML
     private void initialize() {
@@ -142,6 +144,45 @@ public class MainController {
                 zoom(event.getX(), event.getY(), 1 + scaleIncrement);
             } else if (zoomOutButton.isSelected()) {
                 zoom(event.getX(), event.getY(), 1 - scaleIncrement);
+            }
+        });
+
+        labelsListView.setItems(labels);
+
+        // Handle label selection
+        labelsListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            selectedLabel = newSelection;
+            updateLabelButtonsState();
+        });
+
+        // Set cell factory for editable labels
+        labelsListView.setCellFactory(TextFieldListCell.forListView(new StringConverter<LabelItem>() {
+            @Override
+            public String toString(LabelItem label) {
+                return label.getName();
+            }
+
+            @Override
+            public LabelItem fromString(String string) {
+                selectedLabel.setName(string);
+                return selectedLabel;
+            }
+        }));
+
+        // Handle label click events
+        labelsListView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2 && selectedLabel != null) {
+                labelsListView.edit(labelsListView.getSelectionModel().getSelectedIndex());
+            }
+        });
+
+        // Handle clicks outside labels to unselect
+        labelsSection.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            if (event.getTarget() == labelsSection) {
+                labelsListView.getSelectionModel().clearSelection();
+                selectedLabel = null;
+                updateLabelButtonsState();
+                labelsListView.edit(-1); // Exit edit mode
             }
         });
     }
