@@ -27,4 +27,23 @@
             <Pane fx:id="mainPanel" style="-fx-background-color: #f8f9fa;"/>
         </ScrollPane>
     </center>
+    <right>
+        <VBox fx:id="labelsSection" spacing="10" padding="10">
+            <Label text="Labels" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            <ListView fx:id="labelsListView" prefWidth="200" />
+            <HBox spacing="10">
+                <Button text="Create Label" fx:id="createLabelButton" onAction="#handleCreateLabel" />
+                <Button text="Delete Label" fx:id="deleteLabelButton" onAction="#handleDeleteLabel" disable="true" />
+            </HBox>
+            <HBox spacing="10">
+                <Button text="Attach Label" fx:id="attachLabelButton" onAction="#handleAttachLabel" disable="true" />
+                <Button text="Detach Label" fx:id="detachLabelButton" onAction="#handleDetachLabel" disable="true" />
+            </HBox>
+            <!-- Sub-section for attached labels -->
+            <VBox fx:id="attachedLabelsSection" spacing="5" visible="false">
+                <Label text="Attached Labels" style="-fx-font-weight: bold;" />
+                <ListView fx:id="attachedLabelsListView" prefHeight="100" />
+            </VBox>
+        </VBox>
+    </right>
 </BorderPane>
