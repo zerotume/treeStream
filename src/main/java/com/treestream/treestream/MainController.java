@@ -4,11 +4,13 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 
@@ -41,6 +43,27 @@ public class MainController {
 
     @FXML
     private ToggleButton flowConnectButton;
+
+    @FXML
+    private ListView<LabelItem> labelsListView;
+
+    @FXML
+    private Button createLabelButton;
+
+    @FXML
+    private Button deleteLabelButton;
+
+    @FXML
+    private Button attachLabelButton;
+
+    @FXML
+    private Button detachLabelButton;
+
+    @FXML
+    private VBox attachedLabelsSection;
+
+    @FXML
+    private ListView<LabelItem> attachedLabelsListView;
 
 
 
